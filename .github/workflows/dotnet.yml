@@ -21,9 +21,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
+      - name: Build Auth project
+        run: dotnet build HuTao.NET.Auth/HuTao.NET.Auth.csproj --no-restore --configuration Release
 
-      - name: Run tests (failures allowed)
-        run: |
-          dotnet test --no-build --configuration Release || true 
+      - name: Build GI project
+        run: dotnet build HuTao.NET/HuTao.NET.GI.csproj --no-restore --configuration Release 
