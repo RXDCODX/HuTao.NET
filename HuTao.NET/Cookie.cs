@@ -1,65 +1,61 @@
-﻿using System;
+﻿using System.Text.Json.Serialization;
 
-namespace HuTao.NET
+namespace HuTao.NET.GI;
+
+public interface ICookie
 {
-    public interface ICookie
+    public string GetCookie();
+    public string GetHoyoUid();
+}
+
+public class Cookie : ICookie
+{
+    [JsonPropertyName("ltoken")]
+    public string LToken { get; set; } = string.Empty;
+    [JsonPropertyName("ltuid")]
+    public string LtUid { get; set; } = string.Empty;
+
+    public string GetCookie()
     {
-        public string GetCookie();
-        public string GetHoyoUid();
+        return $"ltoken={LToken}; ltuid={LtUid}";
     }
 
-    public class Cookie: ICookie
+    public string GetHoyoUid()
     {
-        public string ltoken { get; set; } = string.Empty;
-        public string ltuid { get; set; } = string.Empty;
+        return LtUid;
+    }
+}
 
-        public string GetCookie()
-        {
-            return $"ltoken={ltoken}; ltuid={ltuid}";
-        }
+public class CookieV2 : ICookie
+{
+    [JsonPropertyName("ltoken_v2")]
+    public string LTokenV2 { get; set; } = string.Empty;
+    [JsonPropertyName("ltmid_v2")]
+    public string LtMidV2 { get; set; } = string.Empty;
 
-        public string GetHoyoUid()
-        {
-            return ltuid;
-        }
+    [JsonPropertyName("ltuid_v2")]
+    public string LtUidV2 { get; set; } = string.Empty;
+
+    public string GetCookie()
+    {
+        return $"ltoken_v2={LTokenV2}; ltmid_v2={LtMidV2}; ltuid_v2={LtUidV2}";
     }
 
-    public class CookieV2: ICookie
+    public string GetHoyoUid()
     {
-        public string ltoken_v2 { get; set; } = string.Empty;
-        public string ltmid_v2 { get; set; } = string.Empty;
+        return LtUidV2;
+    }
+}
 
-        public string ltuid_v2 { get; set; } = string.Empty;
-        public string GetCookie()
-        {
-            return $"ltoken_v2={ltoken_v2}; ltmid_v2={ltmid_v2}; ltuid_v2={ltuid_v2}";
-        }
-
-        public string GetHoyoUid()
-        {
-            return ltuid_v2;
-        }
+public class RawCookie(string cookie, string hoyolabUid) : ICookie
+{
+    public string GetCookie()
+    {
+        return cookie;
     }
 
-    public class RawCookie : ICookie
+    public string GetHoyoUid()
     {
-        private string cookie;
-        private string hoyolabUid;
-
-        public RawCookie(string cookie, string hoyolabUid)
-        {
-            this.cookie = cookie;
-            this.hoyolabUid = hoyolabUid;
-        }
-
-        public string GetCookie()
-        {
-            return cookie;
-        }
-
-        public string GetHoyoUid()
-        {
-            return hoyolabUid;
-        }
+        return hoyolabUid;
     }
 }

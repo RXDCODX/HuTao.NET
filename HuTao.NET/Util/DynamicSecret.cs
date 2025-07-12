@@ -1,45 +1,42 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace HuTao.NET.Util
+namespace HuTao.NET.GI.Util;
+
+internal class DynamicSecret
 {
-    internal class DynamicSecret
+    private static readonly string SALT_OVERSEA = "6s25p5ox5y14umn1p61aqyyvbvvl3lrt";
+
+    //本国API用 未使用
+    //private readonly static string SALT_CHINESE = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs";
+
+    private static readonly string TEXT =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    internal static string GenerateDynamicSecret()
     {
-        private readonly static string SALT_OVERSEA = "6s25p5ox5y14umn1p61aqyyvbvvl3lrt";
+        var t = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        var r = GenerateRandomString(6);
+        var h = ComputeMD5Hash($"salt={SALT_OVERSEA}&t={t}&r={r}");
+        return $"{t},{r},{h}";
+    }
 
-        //本国API用 未使用
-        //private readonly static string SALT_CHINESE = "xV8v4Qu54lUKrEYFZkJhB8cuOh9Asafs";
+    private static string GenerateRandomString(int n)
+    {
+        var result = "";
+        var random = new Random();
 
-        private readonly static string TEXT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-        internal static string GenerateDynamicSecret()
+        for (var i = 0; i < n; i++)
         {
-            int t = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            string r = GenerateRandomString(6);
-            string h = ComputeMD5Hash($"salt={SALT_OVERSEA}&t={t}&r={r}");
-            return $"{t},{r},{h}";
+            result += TEXT[random.Next(TEXT.Length)];
         }
 
-        private static string GenerateRandomString(int n)
-        {
-            string result = "";
-            Random random = new Random();
+        return result;
+    }
 
-            for (int i = 0; i < n; i++)
-            {
-                result += TEXT[random.Next(TEXT.Length)];
-            }
-
-            return result;
-        }
-
-        private static string ComputeMD5Hash(string str)
-        {
-            using (var md5 = MD5.Create())
-            {
-                byte[] md5byte = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
-                return BitConverter.ToString(md5byte).ToLower().Replace("-", "");
-            }
-        }
+    private static string ComputeMD5Hash(string str)
+    {
+        var md5Byte = MD5.HashData(Encoding.UTF8.GetBytes(str));
+        return BitConverter.ToString(md5Byte).ToLower().Replace("-", "");
     }
 }

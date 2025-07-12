@@ -1,20 +1,20 @@
 ﻿using System.Text.RegularExpressions;
+using HuTao.NET.GI;
 
-namespace HuTao.NET.Auth
+namespace HuTao.NET.Auth;
+
+public class Parser
 {
-    public class Parser
+    private static string ParseCookie(string str, string name)
     {
-        private static string parser(string str, string name)
-        {
-            var r = Regex.Match(str, name + "=[^;]+");
-            return r.Value.Replace(name + "=", "");
-        }
-        public static Cookie CoockieParser(string str)
-        {
-            string ltoken = parser(str, "ltoken");
-            string ltuid = parser(str, "ltuid");
-            return new Cookie() { ltoken = ltoken, ltuid = ltuid };
-        }
+        var r = Regex.Match(str, name + "=[^;]+");
+        return r.Value.Replace(name + "=", "");
+    }
 
+    public static Cookie CookieParser(string str)
+    {
+        var ltoken = ParseCookie(str, "ltoken");
+        var ltuid = ParseCookie(str, "ltuid");
+        return new Cookie() { LToken = ltoken, LtUid = ltuid };
     }
 }

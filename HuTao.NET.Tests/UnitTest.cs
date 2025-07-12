@@ -1,123 +1,114 @@
+﻿using System.Runtime.CompilerServices;
+using HuTao.NET.GI;
 using Newtonsoft.Json;
-using System.Runtime.CompilerServices;
-using static HuTao.NET.Util.Errors;
+using static HuTao.NET.GI.Util.Errors;
 
-namespace HuTao.NET.Tests
+namespace HuTao.NET.Tests;
+
+public class UnitTest
 {
-    public class UnitTest
+    private readonly GenshinClient _genshinClient;
+    private readonly GenshinUser _user;
+
+    public const string TestLogFileName = "TestLog.log";
+
+    public UnitTest()
     {
-        private ICookie cookie;
-        private Client client;
-        private GenshinUser user;
-
-        public static string TEST_LOG_FILE_NAME = "TestLog.log";
-
-        public UnitTest()
+        // Используем тестовые данные вместо чтения файла
+        ICookie cookie = new CookieV2()
         {
-            List<string> str = new();
-            foreach (string line in File.ReadLines("./tokens.txt"))
-            {
-                str.Add(line);
-            }
-            /*
-            cookie = new Cookie()
-            {
-                ltoken = str[0],
-                ltuid = str[1],
-            };*/
-            cookie = new CookieV2()
-            {
-                ltmid_v2 = str[0],
-                ltoken_v2 = str[1],
-                ltuid_v2 = str[2],
-            };
-            client = new Client(cookie, new ClientData() { Language = "ja-jp" });
-            user = new GenshinUser(int.Parse(str[3]));
+            LtMidV2 = "test_mid",
+            LTokenV2 = "test_token",
+            LtUidV2 = "test_uid",
+        };
+        _genshinClient = GenshinClient.Create(cookie, new ClientData() { Language = "ja-jp" });
+        _user = new GenshinUser(123456789); // Тестовый UID
+    }
+
+    [ModuleInitializer]
+    internal static void LogInit()
+    {
+        //ѓЌѓOѓtѓ@ѓCѓ‹Џ‰Љъ‰»
+        if (File.Exists(TestLogFileName))
+        {
+            File.Delete(TestLogFileName);
         }
+        ;
+        File.AppendAllText(TestLogFileName, "Unit Test: " + DateTime.Now.ToString() + "\n");
+    }
 
-        [ModuleInitializer]
-        internal static void LogInit()
+    private static void WriteLog(object obj, string logName)
+    {
+        var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
+        File.AppendAllText(TestLogFileName, "[UnitTest][" + logName + "]\n" + json + "\n");
+    }
+
+    [Fact]
+    public async void UserStats()
+    {
+        var res = await _genshinClient.FetchUserStats();
+
+        Assert.NotNull(res.Data);
+        WriteLog(res, "FetchUserStats");
+    }
+
+    [Fact]
+    public async void GetRoles()
+    {
+        var res = await _genshinClient.GetGameRoles();
+
+        Assert.NotNull(res.Data);
+        WriteLog(res, "GetGameRoles");
+    }
+
+    [Fact]
+    public async void AccountInfo()
+    {
+        var res = await _genshinClient.GetUserAccountInfoByLToken();
+
+        Assert.Equal("OK", res.message);
+        WriteLog(res, "GetUserAccountInfoByLToken");
+    }
+
+    [Fact]
+    public async void GetGenshinStats()
+    {
+        var res = await _genshinClient.FetchGenshinStats(_user);
+
+        Assert.Equal("OK", res.message);
+        WriteLog(res, "FetchGenshinStats");
+    }
+
+    [Fact]
+    public async void GetNote()
+    {
+        var res = await _genshinClient.FetchDailyNote(_user);
+
+        Assert.Equal("OK", res.message);
+        WriteLog(res, "FetchDailyNote");
+    }
+
+    [Fact]
+    public async void GetLangs()
+    {
+        var res = await GenshinClient.GetAvailableLanguages();
+
+        Assert.Equal("OK", res.message);
+        WriteLog(res, "GetAvailableLanguages");
+    }
+
+    [Fact]
+    public async void ClaimDailyReward()
+    {
+        try
         {
-            //���O�t�@�C��������
-            if (File.Exists(TEST_LOG_FILE_NAME)) { File.Delete(TEST_LOG_FILE_NAME); };
-            File.AppendAllText(TEST_LOG_FILE_NAME, "Unit Test: " + DateTime.Now.ToString() + "\n");
+            var res = await _genshinClient.ClaimDailyReward(_user);
+            Assert.True(res.IsSuccessed);
+            WriteLog(res, "ClaimDailyReward");
         }
-
-        private void WriteLog(object obj, string logName)
+        catch (DailyRewardAlreadyReceivedException)
         {
-            var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
-            File.AppendAllText(TEST_LOG_FILE_NAME, "[UnitTest]["+logName+"]\n"+json+"\n");
-        }
-
-        [Fact]
-        public async void UserStats()
-        {
-            var res = await client.FetchUserStats();
-
-            Assert.NotNull(res.data);
-            WriteLog(res, "FetchUserStats");
-        }
-
-        [Fact]
-        public async void GetRoles()
-        {
-            var res = await client.GetGenshinRoles();
-
-            Assert.NotNull(res.data);
-            WriteLog(res, "GetGenshinRoles");
-        }
-
-        [Fact]
-        public async void AccountInfo()
-        {
-            var res = await client.GetUserAccountInfoByLToken();
-
-            Assert.Equal("OK", res.message);
-            WriteLog(res, "GetUserAccountInfoByLToken");
-        }
-
-        [Fact]
-        public async void GetGenshinStats()
-        {
-            var res = await client.FetchGenshinStats(user);
-
-            Assert.Equal("OK", res.message);
-            WriteLog(res, "FetchGenshinStats");
-        }
-
-        [Fact]
-        public async void GetNote()
-        {
-            var res = await client.FetchDailyNote(user);
-
-            Assert.Equal("OK", res.message);
-            WriteLog(res, "FetchDailyNote");
-        }
-
-        [Fact]
-        public async void GetLangs()
-        {
-            var res = await Client.GetAvailableLanguage();
-
-            Assert.Equal("OK", res.message);
-            WriteLog(res, "GetAvailableLanguage");
-        }
-
-        [Fact]
-        public async void ClaimDailyReward()
-        {
-            try
-            {
-                var res = await client.ClaimDailyReward(user);
-                Assert.True(res.IsSuccessed);
-                WriteLog(res, "ClaimDailyReward");
-            }
-            catch(DailyRewardAlreadyReceivedException)
-            {
-                Assert.True(true, "daily reward is already received!");
-            }
-            
-
+            Assert.True(true, "daily reward is already received!");
         }
     }
 }

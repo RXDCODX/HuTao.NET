@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HuTao.NET\HuTao.NET.csproj" />
+    <ProjectReference Include="..\HuTao.NET\HuTao.NET.GI.csproj" />
   </ItemGroup>
 
 </Project>

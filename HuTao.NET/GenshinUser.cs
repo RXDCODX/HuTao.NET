@@ -1,37 +1,27 @@
-﻿using HuTao.NET.Models;
-using HuTao.NET.Util;
+﻿using HuTao.NET.GI.Models;
+using HuTao.NET.GI.Models.HoYoLab;
 
-namespace HuTao.NET
+namespace HuTao.NET.GI;
+
+/// <summary>
+/// Genshin Impact user representation
+/// </summary>
+public class GenshinUser(int uid) : BaseGameUser(uid)
 {
-    public class GenshinUser
+    private const int GenshinGameID = 2;
+
+    /// <summary>
+    /// Get UID from HoyoLab user stats for Genshin Impact
+    /// </summary>
+    public static GenshinUser GetUIDFromHoyoLab(UserStats user)
     {
-        public int uid;
-        public string server;
-        private readonly static int GENSHIN_GAME_ID = 2;
+        return GetUIDFromHoyoLab<GenshinUser>(user, GenshinGameID);
+    }
 
-        public GenshinUser(int uid)
-        {
-            this.uid = uid;
-            this.server = Server.GetServer(uid);
-        }
+    protected override int GameId => GenshinGameID;
 
-        public static GenshinUser GetUIDFromHoyoLab(UserStats user)
-        {
-            int uid = 0;
-            Parallel.ForEach(user.data!.GameLists!, game =>
-            {
-                if (game.GameId == GENSHIN_GAME_ID)
-                {
-                    uid = int.Parse(game.GameUid!);
-                }
-            });
-
-            if (uid == 0)
-            {
-                throw new Errors.AccountNotFoundException();
-            }
-
-            return new GenshinUser(uid);
-        }
+    protected override string GetServer(int uid)
+    {
+        return Util.Server.GetGenshinServer(uid);
     }
 }

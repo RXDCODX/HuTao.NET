@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HuTao.NET.Auth\HuTao.NET.Auth.csproj" />
-    <ProjectReference Include="..\HuTao.NET\HuTao.NET.csproj" />
+    <ProjectReference Include="..\HuTao.NET\HuTao.NET.GI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
