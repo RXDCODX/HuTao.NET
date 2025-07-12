@@ -1,7 +1,7 @@
-﻿using HuTao.NET.GI.Models.GenshinImpact;
-using HuTao.NET.GI.Models.HoYoLab;
+﻿using HuTao.NET.Models.GenshinImpact;
+using HuTao.NET.Models.HoYoLab;
 
-namespace HuTao.NET.GI;
+namespace HuTao.NET;
 
 /// <summary>
 /// Root client that manages all game clients for HoyoLab WebAPI.

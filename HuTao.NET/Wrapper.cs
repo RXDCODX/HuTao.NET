@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
-using HuTao.NET.GI.Models.GenshinImpact;
-using HuTao.NET.GI.Util;
-using static HuTao.NET.GI.Util.Errors;
+using HuTao.NET.Models.GenshinImpact;
+using HuTao.NET.Util;
+using static HuTao.NET.Util.Errors;
 
-namespace HuTao.NET.GI;
+namespace HuTao.NET;
 
 internal class Wrapper<T>
     where T : IHoyoLab
@@ -48,8 +48,8 @@ internal class Wrapper<T>
         var jsonData =
             JsonSerializer.Deserialize<T>(jsonString) ?? throw new NullReferenceException();
 
-        return jsonData.retcode != 0
-            ? throw new HoyoLabApiBadRequestException(jsonData.message!, jsonData.retcode)
+        return jsonData.Retcode != 0
+            ? throw new HoyoLabApiBadRequestException(jsonData.Message!, jsonData.Retcode)
             : jsonData;
     }
 }

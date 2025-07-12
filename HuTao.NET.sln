@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HuTao.NET.GI", "HuTao.NET\HuTao.NET.GI.csproj", "{A5AA406A-3333-4B9F-9692-D2026AD2C5BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HuTao.NET", "HuTao.NET\HuTao.NET.csproj", "{A5AA406A-3333-4B9F-9692-D2026AD2C5BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HuTao.NET.Tests", "HuTao.NET.Tests\HuTao.NET.Tests.csproj", "{045E5A65-5998-4232-B141-7F9740A6F5C1}"
 EndProject

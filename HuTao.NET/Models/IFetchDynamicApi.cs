@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace HuTao.NET.GI.Models;
+namespace HuTao.NET.Models;
 
 public abstract class BaseFetchDynamicApi(ClientData clientData, ICookie cookie)
 {

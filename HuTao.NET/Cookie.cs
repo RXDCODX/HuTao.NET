@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace HuTao.NET.GI;
+namespace HuTao.NET;
 
 public interface ICookie
 {
@@ -12,6 +12,7 @@ public class Cookie : ICookie
 {
     [JsonPropertyName("ltoken")]
     public string LToken { get; set; } = string.Empty;
+
     [JsonPropertyName("ltuid")]
     public string LtUid { get; set; } = string.Empty;
 
@@ -30,6 +31,7 @@ public class CookieV2 : ICookie
 {
     [JsonPropertyName("ltoken_v2")]
     public string LTokenV2 { get; set; } = string.Empty;
+
     [JsonPropertyName("ltmid_v2")]
     public string LtMidV2 { get; set; } = string.Empty;
 

@@ -1,5 +1,4 @@
-﻿using HuTao.NET.GI;
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 
 namespace HuTao.NET.Tests;
 
@@ -88,17 +87,17 @@ public class HuTaoClientTest(ITestOutputHelper testOutputHelper)
             // Test getting user stats
             var userStats = await client.FetchUserStats();
             Assert.NotNull(userStats);
-            Assert.Equal(0, userStats.retcode);
+            Assert.Equal(0, userStats.Retcode);
 
             // Test getting account info
             var accountInfo = await client.GetUserAccountInfoByLToken();
             Assert.NotNull(accountInfo);
-            Assert.Equal(0, accountInfo.retcode);
+            Assert.Equal(0, accountInfo.Retcode);
 
             // Test getting game roles
             var gameRoles = await client.GetGameRoles();
             Assert.NotNull(gameRoles);
-            Assert.Equal(0, gameRoles.retcode);
+            Assert.Equal(0, gameRoles.Retcode);
 
             testOutputHelper.WriteLine($"User Stats: {userStats.Data?.Name}");
             testOutputHelper.WriteLine($"Account Info: {accountInfo.Data?.AccountName}");

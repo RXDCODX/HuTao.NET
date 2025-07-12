@@ -1,4 +1,4 @@
-﻿namespace HuTao.NET.GI;
+﻿namespace HuTao.NET;
 
 public class EndPoints
 {

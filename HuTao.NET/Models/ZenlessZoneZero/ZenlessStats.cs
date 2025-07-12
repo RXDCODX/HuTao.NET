@@ -1,12 +1,13 @@
 ﻿using System.Text.Json.Serialization;
-using HuTao.NET.GI.Models.GenshinImpact;
+using HuTao.NET.Models.GenshinImpact;
 
-namespace HuTao.NET.GI.Models.ZenlessZoneZero;
+namespace HuTao.NET.Models.ZenlessZoneZero;
 
 public class ZenlessStats : IHoyoLab
 {
-    public int retcode { get; set; }
-    public string? message { get; set; }
+    public int Retcode { get; set; }
+    public string? Message { get; set; }
+
     [JsonPropertyName("data")]
     public ZenlessStatsData? Data { get; set; }
 }

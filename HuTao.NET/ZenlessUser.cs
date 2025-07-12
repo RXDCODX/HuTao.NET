@@ -1,7 +1,7 @@
-﻿using HuTao.NET.GI.Models;
-using HuTao.NET.GI.Models.HoYoLab;
+﻿using HuTao.NET.Models;
+using HuTao.NET.Models.HoYoLab;
 
-namespace HuTao.NET.GI;
+namespace HuTao.NET;
 
 /// <summary>
 /// Zenless Zone Zero user representation

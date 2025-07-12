@@ -4,7 +4,7 @@ using WebDriverManager;
 using WebDriverManager.DriverConfigs;
 using WebDriverManager.DriverConfigs.Impl;
 using WebDriverManager.Helpers;
-using Cookie = HuTao.NET.GI.Cookie;
+using Cookie = HuTao.NET.Cookie;
 
 namespace HuTao.NET.Auth;
 

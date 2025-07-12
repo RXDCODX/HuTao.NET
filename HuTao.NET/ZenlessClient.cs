@@ -1,8 +1,8 @@
-﻿using HuTao.NET.GI.Models;
-using HuTao.NET.GI.Models.GenshinImpact;
-using HuTao.NET.GI.Models.ZenlessZoneZero;
+﻿using HuTao.NET.Models;
+using HuTao.NET.Models.GenshinImpact;
+using HuTao.NET.Models.ZenlessZoneZero;
 
-namespace HuTao.NET.GI;
+namespace HuTao.NET;
 
 /// <summary>
 /// Zenless Zone Zero client for HoyoLab WebAPI

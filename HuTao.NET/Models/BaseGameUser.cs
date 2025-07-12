@@ -1,7 +1,7 @@
-﻿using HuTao.NET.GI.Models.HoYoLab;
-using HuTao.NET.GI.Util;
+﻿using HuTao.NET.Models.HoYoLab;
+using HuTao.NET.Util;
 
-namespace HuTao.NET.GI.Models;
+namespace HuTao.NET.Models;
 
 /// <summary>
 /// Base class for game users

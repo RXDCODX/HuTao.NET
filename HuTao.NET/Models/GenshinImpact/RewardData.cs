@@ -1,4 +1,4 @@
-﻿namespace HuTao.NET.GI.Models.GenshinImpact;
+﻿namespace HuTao.NET.Models.GenshinImpact;
 
 public class RewardData
 {

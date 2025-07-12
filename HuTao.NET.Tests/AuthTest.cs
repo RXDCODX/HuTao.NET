@@ -1,5 +1,4 @@
 ﻿using HuTao.NET.Auth;
-using HuTao.NET.GI;
 
 namespace HuTao.NET.Tests;
 

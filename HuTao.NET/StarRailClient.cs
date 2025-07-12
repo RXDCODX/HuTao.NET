@@ -1,9 +1,9 @@
-﻿using HuTao.NET.GI.Models;
-using HuTao.NET.GI.Models.GenshinImpact;
-using HuTao.NET.GI.Models.HonkaiStarRail;
-using HuTao.NET.GI.Util;
+﻿using HuTao.NET.Models;
+using HuTao.NET.Models.GenshinImpact;
+using HuTao.NET.Models.HonkaiStarRail;
+using HuTao.NET.Util;
 
-namespace HuTao.NET.GI;
+namespace HuTao.NET;
 
 /// <summary>
 /// Honkai Star Rail client for HoyoLab WebAPI
@@ -259,41 +259,41 @@ public class StarRailClient : BaseGameClient
     /// <summary>
     /// Получить форматированную строку времени восстановления энергии
     /// </summary>
-    public string GetStaminaRecoveryTimeString(StarRailDailyNoteData data)
+    public static string GetStaminaRecoveryTimeString(StarRailDailyNoteData data)
     {
-        return StaminaManager.GetStaminaRecoveryTimeString(data);
+        return StarRailStaminaManager.GetStaminaRecoveryTimeString(data);
     }
 
     /// <summary>
     /// Получить форматированную строку времени до следующей единицы энергии
     /// </summary>
-    public string GetNextStaminaPointTimeString(StarRailDailyNoteData data)
+    public static string GetNextStaminaPointTimeString(StarRailDailyNoteData data)
     {
-        return StaminaManager.GetNextStaminaPointTimeString(data);
+        return StarRailStaminaManager.GetNextStaminaPointTimeString(data);
     }
 
     /// <summary>
     /// Получить информацию о текущем состоянии энергии
     /// </summary>
-    public string GetStaminaInfo(StarRailDailyNoteData data)
+    public static string GetStaminaInfo(StarRailDailyNoteData data)
     {
-        return StaminaManager.GetStaminaInfo(data);
+        return StarRailStaminaManager.GetStaminaInfo(data);
     }
 
     /// <summary>
     /// Получить прогноз энергии на указанное время
     /// </summary>
-    public int GetStaminaForecast(StarRailDailyNoteData data, DateTime targetTime)
+    public static int GetStaminaForecast(StarRailDailyNoteData data, DateTime targetTime)
     {
-        return StaminaManager.GetStaminaForecast(data, targetTime);
+        return StarRailStaminaManager.GetStaminaForecast(data, targetTime);
     }
 
     /// <summary>
     /// Получить рекомендации по использованию энергии
     /// </summary>
-    public List<string> GetStaminaRecommendations(StarRailDailyNoteData data)
+    public static List<string> GetStaminaRecommendations(StarRailDailyNoteData data)
     {
-        return StaminaManager.GetStaminaRecommendations(data);
+        return StarRailStaminaManager.GetStaminaRecommendations(data);
     }
 
     // ===== МЕТОДЫ ДЛЯ РАБОТЫ С СОБЫТИЯМИ =====

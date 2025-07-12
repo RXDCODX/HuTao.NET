@@ -1,12 +1,12 @@
-using HuTao.NET.GI.Models.HonkaiStarRail;
-using HuTao.NET.GI;
+﻿using HuTao.NET.Models.HonkaiStarRail;
+using Xunit.Abstractions;
 
 namespace HuTao.NET.Tests;
 
 /// <summary>
-/// Тесты для событий энергии в Honkai Star Rail
+/// Tests for stamina events in Honkai Star Rail
 /// </summary>
-public class StarRailStaminaEventsTest
+public class StarRailStaminaEventsTest(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     public void TestStaminaManager()
@@ -18,108 +18,136 @@ public class StarRailStaminaEventsTest
             MaxStamina = 300,
             StaminaRecoverTime = 1800, // 30 минут
             StaminaFullTimestamp = DateTimeOffset.Now.AddHours(2).ToUnixTimeSeconds(),
-            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds()
+            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
 
-        // Тестируем основные методы
-        Console.WriteLine("=== Тестирование менеджера энергии Star Rail ===");
-        Console.WriteLine($"Текущая энергия: {testData.CurrentStamina}/{testData.MaxStamina}");
-        Console.WriteLine($"Процент заполнения: {StarRailStaminaManager.GetStaminaPercentage(testData):P1}");
-        Console.WriteLine($"Энергия заполнена: {StarRailStaminaManager.IsStaminaFull(testData)}");
+        // Test main methods
+        testOutputHelper.WriteLine("=== Testing Star Rail Stamina Manager ===");
+        testOutputHelper.WriteLine($"Current Stamina: {testData.CurrentStamina}/{testData.MaxStamina}");
+        testOutputHelper.WriteLine(
+            $"Stamina Percentage: {StarRailStaminaManager.GetStaminaPercentage(testData):P1}"
+        );
+        testOutputHelper.WriteLine($"Is Stamina Full: {StarRailStaminaManager.IsStaminaFull(testData)}");
 
-        // Время восстановления
+        // Recovery time
         var recoveryTime = StarRailStaminaManager.GetStaminaRecoveryTime(testData);
-        Console.WriteLine($"Время до полного восстановления: {recoveryTime.Hours:D2}:{recoveryTime.Minutes:D2}:{recoveryTime.Seconds:D2}");
-        Console.WriteLine($"Форматированное время: {recoveryTime.Hours:D2}:{recoveryTime.Minutes:D2}:{recoveryTime.Seconds:D2}");
+        testOutputHelper.WriteLine(
+            $"Time to Full Recovery: {recoveryTime.Hours:D2}:{recoveryTime.Minutes:D2}:{recoveryTime.Seconds:D2}"
+        );
+        testOutputHelper.WriteLine(
+            $"Formatted Time: {recoveryTime.Hours:D2}:{recoveryTime.Minutes:D2}:{recoveryTime.Seconds:D2}"
+        );
 
-        // Время полного восстановления
+        // Full recovery time
         var fullTime = StarRailStaminaManager.GetStaminaFullTime(testData);
-        Console.WriteLine($"Время полного восстановления: {fullTime:HH:mm:ss}");
+        testOutputHelper.WriteLine($"Full Recovery Time: {fullTime:HH:mm:ss}");
 
-        // Следующая единица энергии
+        // Next stamina point
         var nextPointTime = StarRailStaminaManager.GetNextStaminaPointTime(testData);
         var timeToNextPoint = StarRailStaminaManager.GetTimeToNextStaminaPoint(testData);
-        Console.WriteLine($"Следующая единица энергии в: {nextPointTime:HH:mm:ss}");
-        Console.WriteLine($"Время до следующей единицы: {timeToNextPoint.Minutes:D2}:{timeToNextPoint.Seconds:D2}");
-        Console.WriteLine($"Форматированное время: {timeToNextPoint.Minutes:D2}:{timeToNextPoint.Seconds:D2}");
+        testOutputHelper.WriteLine($"Next Stamina Point at: {nextPointTime:HH:mm:ss}");
+        testOutputHelper.WriteLine(
+            $"Time to Next Point: {timeToNextPoint.Minutes:D2}:{timeToNextPoint.Seconds:D2}"
+        );
+        testOutputHelper.WriteLine(
+            $"Formatted Time: {timeToNextPoint.Minutes:D2}:{timeToNextPoint.Seconds:D2}"
+        );
 
-        // Расчет энергии через время
-        var staminaIn1Hour = StarRailStaminaManager.GetStaminaAtTime(testData, TimeSpan.FromHours(1));
-        var staminaIn2Hours = StarRailStaminaManager.GetStaminaAtTime(testData, TimeSpan.FromHours(2));
-        Console.WriteLine($"Энергия через 1 час: {staminaIn1Hour}");
-        Console.WriteLine($"Энергия через 2 часа: {staminaIn2Hours}");
+        // Stamina calculation over time
+        var staminaIn1Hour = StarRailStaminaManager.GetStaminaAtTime(
+            testData,
+            TimeSpan.FromHours(1)
+        );
+        var staminaIn2Hours = StarRailStaminaManager.GetStaminaAtTime(
+            testData,
+            TimeSpan.FromHours(2)
+        );
+        testOutputHelper.WriteLine($"Stamina in 1 hour: {staminaIn1Hour}");
+        testOutputHelper.WriteLine($"Stamina in 2 hours: {staminaIn2Hours}");
 
-        // Время достижения целевой энергии
+        // Time to reach target stamina
         var timeTo200 = StarRailStaminaManager.GetTimeToReachStamina(testData, 200);
         var timeSpanTo200 = StarRailStaminaManager.GetTimeSpanToReachStamina(testData, 200);
-        Console.WriteLine($"Время достижения 200 энергии: {timeTo200:HH:mm:ss}");
-        Console.WriteLine($"Время до 200 энергии: {timeSpanTo200.Hours:D2}:{timeSpanTo200.Minutes:D2}:{timeSpanTo200.Seconds:D2}");
+        testOutputHelper.WriteLine($"Time to reach 200 stamina: {timeTo200:HH:mm:ss}");
+        testOutputHelper.WriteLine(
+            $"Time to 200 stamina: {timeSpanTo200.Hours:D2}:{timeSpanTo200.Minutes:D2}:{timeSpanTo200.Seconds:D2}"
+        );
 
         var timeToFull = StarRailStaminaManager.GetTimeToReachStamina(testData, 300);
         var timeSpanToFull = StarRailStaminaManager.GetTimeSpanToReachStamina(testData, 300);
-        Console.WriteLine($"Время достижения полной энергии: {timeToFull:HH:mm:ss}");
-        Console.WriteLine($"Время до полной энергии: {timeSpanToFull.Hours:D2}:{timeSpanToFull.Minutes:D2}:{timeSpanToFull.Seconds:D2}");
+        testOutputHelper.WriteLine($"Time to reach full stamina: {timeToFull:HH:mm:ss}");
+        testOutputHelper.WriteLine(
+            $"Time to full stamina: {timeSpanToFull.Hours:D2}:{timeSpanToFull.Minutes:D2}:{timeSpanToFull.Seconds:D2}"
+        );
 
-        // Тестируем новые методы
-        var staminaInfo = $"Энергия: {testData.CurrentStamina}/{testData.MaxStamina} ({StarRailStaminaManager.GetStaminaPercentage(testData):P1})";
-        Console.WriteLine($"Информация о энергии: {staminaInfo}");
+        // Test new methods
+        var staminaInfo =
+            $"Stamina: {testData.CurrentStamina}/{testData.MaxStamina} ({StarRailStaminaManager.GetStaminaPercentage(testData):P1})";
+        testOutputHelper.WriteLine($"Stamina Info: {staminaInfo}");
 
-        Console.WriteLine("Рекомендации:");
-        Console.WriteLine("  Используйте энергию эффективно");
+        testOutputHelper.WriteLine("Recommendations:");
+        testOutputHelper.WriteLine("  Use stamina efficiently");
 
         var forecast = StarRailStaminaManager.GetStaminaAtTime(testData, TimeSpan.FromHours(3));
-        Console.WriteLine($"Прогноз энергии через 3 часа: {forecast}");
+        testOutputHelper.WriteLine($"Stamina forecast in 3 hours: {forecast}");
 
-        Console.WriteLine("=== Тест завершен ===");
+        testOutputHelper.WriteLine("=== Test completed ===");
     }
 
     [Fact]
     public void TestStaminaCalculationAccuracy()
     {
-
         // Тестируем точность расчетов
         var testData = new StarRailDailyNoteData
         {
             CurrentStamina = 0,
             MaxStamina = 300,
             StaminaRecoverTime = 0,
-            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds()
+            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
 
-        // Проверяем, что через 6 минут получаем 1 энергию
-        var staminaAfter6Minutes = StarRailStaminaManager.GetStaminaAtTime(testData, TimeSpan.FromMinutes(6));
+        // Check that we get 1 stamina after 6 minutes
+        var staminaAfter6Minutes = StarRailStaminaManager.GetStaminaAtTime(
+            testData,
+            TimeSpan.FromMinutes(6)
+        );
         Assert.Equal(1, staminaAfter6Minutes);
 
-        // Проверяем, что через 1 час получаем 10 энергии (60/6 = 10)
-        var staminaAfter1Hour = StarRailStaminaManager.GetStaminaAtTime(testData, TimeSpan.FromHours(1));
+        // Check that we get 10 stamina after 1 hour (60/6 = 10)
+        var staminaAfter1Hour = StarRailStaminaManager.GetStaminaAtTime(
+            testData,
+            TimeSpan.FromHours(1)
+        );
         Assert.Equal(10, staminaAfter1Hour);
 
-        // Проверяем, что через 30 часов получаем максимум энергии
-        var staminaAfter30Hours = StarRailStaminaManager.GetStaminaAtTime(testData, TimeSpan.FromHours(30));
+        // Check that we get maximum stamina after 30 hours
+        var staminaAfter30Hours = StarRailStaminaManager.GetStaminaAtTime(
+            testData,
+            TimeSpan.FromHours(30)
+        );
         Assert.Equal(300, staminaAfter30Hours);
     }
 
     [Fact]
     public void TestEdgeCases()
     {
-
         var testData = new StarRailDailyNoteData
         {
             CurrentStamina = 300,
             MaxStamina = 300,
             StaminaRecoverTime = 0,
-            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds()
+            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
 
-        // Тестируем граничные случаи
+        // Test edge cases
         Assert.True(StarRailStaminaManager.IsStaminaFull(testData));
         Assert.Equal(1.0, StarRailStaminaManager.GetStaminaPercentage(testData));
 
-        // Если энергия уже заполнена, время до следующей единицы должно быть 0
+        // If stamina is already full, time to next point should be 0
         var timeToNext = StarRailStaminaManager.GetTimeToNextStaminaPoint(testData);
         Assert.Equal(TimeSpan.Zero, timeToNext);
 
-        // Если запрашиваем энергию меньше текущей, должно вернуть текущее время
+        // If we request stamina less than current, should return current time
         var timeToReach = StarRailStaminaManager.GetTimeToReachStamina(testData, 200);
         var currentTime = DateTimeOffset.FromUnixTimeSeconds(testData.CurrentTimestamp).DateTime;
         Assert.Equal(currentTime, timeToReach);
@@ -128,107 +156,110 @@ public class StarRailStaminaEventsTest
     [Fact]
     public void TestStaminaEventsSubscription()
     {
-        Console.WriteLine("=== Тестирование подписки на события энергии ===");
+        testOutputHelper.WriteLine("=== Testing Stamina Events Subscription ===");
 
-        // Создаем тестовый клиент через фабричный метод
+        // Create test client through factory method
         var cookie = new Cookie { LToken = "test", LtUid = "test" };
         using var client = HuTaoClient.Create(cookie);
         var starRailClient = client.StarRail;
 
-        // Создаем тестовые данные
+        // Create test data
         var testData = new StarRailDailyNoteData
         {
             CurrentStamina = 299,
             MaxStamina = 300,
-            StaminaRecoverTime = 360, // 6 минут
+            StaminaRecoverTime = 360, // 6 minutes
             StaminaFullTimestamp = DateTimeOffset.Now.AddMinutes(6).ToUnixTimeSeconds(),
-            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds()
+            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
 
-        // Флаги для отслеживания вызовов событий
-        bool staminaFullCalled = false;
-        bool staminaPointReceivedCalled = false;
-        bool staminaChangedCalled = false;
+        // Flags for tracking event calls
+        var staminaFullCalled = false;
+        var staminaPointReceivedCalled = false;
+        var staminaChangedCalled = false;
 
-        // Подписываемся на события
+        // Subscribe to events
         starRailClient.StaminaFull += (sender, args) =>
         {
-            Console.WriteLine($"Событие: Энергия заполнена!");
-            Console.WriteLine($"  Время: {args.FullTime:HH:mm:ss}");
-            Console.WriteLine($"  Максимум: {args.MaxStamina}");
-            Console.WriteLine($"  Время восстановления: {args.RecoveryTime}");
+            testOutputHelper.WriteLine($"Event: Stamina Full!");
+            testOutputHelper.WriteLine($"  Time: {args.FullTime:HH:mm:ss}");
+            testOutputHelper.WriteLine($"  Maximum: {args.MaxStamina}");
+            testOutputHelper.WriteLine($"  Recovery Time: {args.RecoveryTime}");
             staminaFullCalled = true;
         };
 
         starRailClient.StaminaPointReceived += (sender, args) =>
         {
-            Console.WriteLine($"Событие: Получена единица энергии!");
-            Console.WriteLine($"  Время: {args.PointTime:HH:mm:ss}");
-            Console.WriteLine($"  Новое значение: {args.NewStaminaValue}");
-            Console.WriteLine($"  Процент: {args.StaminaPercentage:P1}");
-            Console.WriteLine($"  Время до следующей: {args.TimeToNextPoint}");
+            testOutputHelper.WriteLine($"Event: Stamina Point Received!");
+            testOutputHelper.WriteLine($"  Time: {args.PointTime:HH:mm:ss}");
+            testOutputHelper.WriteLine($"  New Value: {args.NewStaminaValue}");
+            testOutputHelper.WriteLine($"  Percentage: {args.StaminaPercentage:P1}");
+            testOutputHelper.WriteLine($"  Time to Next: {args.TimeToNextPoint}");
             staminaPointReceivedCalled = true;
         };
 
         starRailClient.StaminaChanged += (sender, args) =>
         {
-            Console.WriteLine($"Событие: Изменение энергии!");
-            Console.WriteLine($"  Предыдущее: {args.PreviousStamina}");
-            Console.WriteLine($"  Текущее: {args.CurrentStamina}");
-            Console.WriteLine($"  Изменение: {args.StaminaChange}");
-            Console.WriteLine($"  Процент: {args.StaminaPercentage:P1}");
-            Console.WriteLine($"  Время: {args.ChangeTime:HH:mm:ss}");
+            testOutputHelper.WriteLine($"Event: Stamina Changed!");
+            testOutputHelper.WriteLine($"  Previous: {args.PreviousStamina}");
+            testOutputHelper.WriteLine($"  Current: {args.CurrentStamina}");
+            testOutputHelper.WriteLine($"  Change: {args.StaminaChange}");
+            testOutputHelper.WriteLine($"  Percentage: {args.StaminaPercentage:P1}");
+            testOutputHelper.WriteLine($"  Time: {args.ChangeTime:HH:mm:ss}");
             staminaChangedCalled = true;
         };
 
-        // Проверяем события с предыдущим значением 298 (получение единицы энергии)
+        // Check events with previous value 298 (receiving stamina point)
         starRailClient.CheckAndTriggerStaminaEvents(testData, 298);
 
-        // Проверяем, что события были вызваны
-        Assert.True(staminaPointReceivedCalled, "Событие получения единицы энергии должно быть вызвано");
-        Assert.True(staminaChangedCalled, "Событие изменения энергии должно быть вызвано");
+        // Check that events were called
+        Assert.True(
+            staminaPointReceivedCalled,
+            "Stamina point received event should be called"
+        );
+        Assert.True(staminaChangedCalled, "Stamina changed event should be called");
 
-        // Тестируем достижение максимальной энергии
+        // Test reaching maximum stamina
         var fullStaminaData = new StarRailDailyNoteData
         {
             CurrentStamina = 300,
             MaxStamina = 300,
             StaminaRecoverTime = 0,
             StaminaFullTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds(),
-            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds()
+            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
 
-        // Сбрасываем флаги
+        // Reset flags
         staminaFullCalled = false;
         staminaPointReceivedCalled = false;
         staminaChangedCalled = false;
 
-        // Проверяем события с полной энергией
+        // Check events with full stamina
         starRailClient.CheckAndTriggerStaminaEvents(fullStaminaData, 299);
 
-        // Проверяем, что событие максимальной энергии было вызвано
-        Assert.True(staminaFullCalled, "Событие максимальной энергии должно быть вызвано");
-        Assert.True(staminaChangedCalled, "Событие изменения энергии должно быть вызвано");
+        // Check that maximum stamina event was called
+        Assert.True(staminaFullCalled, "Maximum stamina event should be called");
+        Assert.True(staminaChangedCalled, "Stamina changed event should be called");
 
-        Console.WriteLine("=== Тест событий завершен ===");
+        testOutputHelper.WriteLine("=== Events test completed ===");
     }
 
     [Fact]
     public void TestStaminaEventArguments()
     {
-        Console.WriteLine("=== Тестирование аргументов событий ===");
+        testOutputHelper.WriteLine("=== Testing Event Arguments ===");
 
-        // Создаем тестовые данные
+        // Create test data
         var testData = new StarRailDailyNoteData
         {
             CurrentStamina = 150,
             MaxStamina = 300,
             StaminaRecoverTime = 1800,
             StaminaFullTimestamp = DateTimeOffset.Now.AddHours(2).ToUnixTimeSeconds(),
-            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds()
+            CurrentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds(),
         };
 
-        // Тестируем аргументы события изменения энергии
+        // Test stamina changed event arguments
         var changeArgs = new StaminaChangedEventArgs(140, 150, 300, DateTime.Now);
 
         Assert.Equal(140, changeArgs.PreviousStamina);
@@ -237,10 +268,10 @@ public class StarRailStaminaEventsTest
         Assert.Equal(10, changeArgs.StaminaChange);
         Assert.Equal(0.5, changeArgs.StaminaPercentage);
 
-        Console.WriteLine($"Изменение энергии: {changeArgs.StaminaChange}");
-        Console.WriteLine($"Процент заполнения: {changeArgs.StaminaPercentage:P1}");
+        testOutputHelper.WriteLine($"Stamina Change: {changeArgs.StaminaChange}");
+        testOutputHelper.WriteLine($"Stamina Percentage: {changeArgs.StaminaPercentage:P1}");
 
-        // Тестируем аргументы события получения единицы энергии
+        // Test stamina point received event arguments
         var pointArgs = new StaminaPointReceivedEventArgs(
             DateTime.Now.AddMinutes(6),
             151,
@@ -253,10 +284,10 @@ public class StarRailStaminaEventsTest
         Assert.Equal(TimeSpan.FromMinutes(6), pointArgs.TimeToNextPoint);
         Assert.Equal(151.0 / 300.0, pointArgs.StaminaPercentage);
 
-        Console.WriteLine($"Новое значение энергии: {pointArgs.NewStaminaValue}");
-        Console.WriteLine($"Время до следующей единицы: {pointArgs.TimeToNextPoint}");
+        testOutputHelper.WriteLine($"New Stamina Value: {pointArgs.NewStaminaValue}");
+        testOutputHelper.WriteLine($"Time to Next Point: {pointArgs.TimeToNextPoint}");
 
-        // Тестируем аргументы события максимальной энергии
+        // Test maximum stamina event arguments
         var fullArgs = new StaminaFullEventArgs(
             DateTime.Now.AddHours(2),
             300,
@@ -266,9 +297,9 @@ public class StarRailStaminaEventsTest
         Assert.Equal(300, fullArgs.MaxStamina);
         Assert.Equal(TimeSpan.FromHours(2), fullArgs.RecoveryTime);
 
-        Console.WriteLine($"Максимальная энергия: {fullArgs.MaxStamina}");
-        Console.WriteLine($"Время восстановления: {fullArgs.RecoveryTime}");
+        testOutputHelper.WriteLine($"Maximum Stamina: {fullArgs.MaxStamina}");
+        testOutputHelper.WriteLine($"Recovery Time: {fullArgs.RecoveryTime}");
 
-        Console.WriteLine("=== Тест аргументов завершен ===");
+        testOutputHelper.WriteLine("=== Event arguments test completed ===");
     }
 }

@@ -1,5 +1,4 @@
-﻿using HuTao.NET.GI;
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 
 namespace HuTao.NET.Tests;
 
@@ -21,7 +20,7 @@ public class StarRailTest(ITestOutputHelper testOutputHelper)
             var rewardData = await starRailClient.GetStarRailRewardData();
 
             Assert.NotNull(rewardData);
-            Assert.Equal(0, rewardData.retcode);
+            Assert.Equal(0, rewardData.Retcode);
             Assert.NotNull(rewardData.Data);
             Assert.NotNull(rewardData.Data.Awards);
 
@@ -51,8 +50,8 @@ public class StarRailTest(ITestOutputHelper testOutputHelper)
         Assert.Equal(800000000, user.Uid);
         Assert.Equal("prod_official_asia", user.Server);
 
-        Console.WriteLine($"UID: {user.Uid}");
-        Console.WriteLine($"Server: {user.Server}");
+        testOutputHelper.WriteLine($"UID: {user.Uid}");
+        testOutputHelper.WriteLine($"Server: {user.Server}");
         return Task.CompletedTask;
     }
 
@@ -73,7 +72,7 @@ public class StarRailTest(ITestOutputHelper testOutputHelper)
             var dailyNote = await starRailClient.FetchDailyNote(user);
 
             Assert.NotNull(dailyNote);
-            Assert.Equal(0, dailyNote.retcode);
+            Assert.Equal(0, dailyNote.Retcode);
             Assert.NotNull(dailyNote.Data);
 
             Console.WriteLine(

@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Nodes;
-using HuTao.NET.GI.Models.GenshinImpact;
-using HuTao.NET.GI.Models.HoYoLab;
+using HuTao.NET.Models.GenshinImpact;
+using HuTao.NET.Models.HoYoLab;
 
-namespace HuTao.NET.GI.Models;
+namespace HuTao.NET.Models;
 
 /// <summary>
 /// Base class for all game clients that handle HoyoLab WebAPI

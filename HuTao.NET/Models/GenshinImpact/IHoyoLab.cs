@@ -1,7 +1,12 @@
-﻿namespace HuTao.NET.GI.Models.GenshinImpact;
+﻿using System.Text.Json.Serialization;
+
+namespace HuTao.NET.Models.GenshinImpact;
 
 public interface IHoyoLab
 {
-    public int retcode { get; set; }
-    public string? message { get; set; }
+    [JsonPropertyName("retcode")]
+    public int Retcode { get; set; }
+
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
 }

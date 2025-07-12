@@ -1,12 +1,12 @@
 ﻿using System.Text.Json.Serialization;
-using HuTao.NET.GI.Models.GenshinImpact;
+using HuTao.NET.Models.GenshinImpact;
 
-namespace HuTao.NET.GI.Models.HoYoLab;
+namespace HuTao.NET.Models.HoYoLab;
 
 public class UserAccountInfo : IHoyoLab
 {
-    public int retcode { get; set; }
-    public string? message { get; set; }
+    public int Retcode { get; set; }
+    public string? Message { get; set; }
 
     [JsonPropertyName("data")]
     public AccountInfoData? Data { get; set; }

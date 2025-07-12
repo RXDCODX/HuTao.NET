@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace HuTao.NET.GI.Models.GenshinImpact;
+namespace HuTao.NET.Models.GenshinImpact;
 
 public class GenshinStats : IHoyoLab
 {
-    public int retcode { get; set; }
-    public string? message { get; set; }
+    public int Retcode { get; set; }
+    public string? Message { get; set; }
 
     [JsonPropertyName("data")]
     public GenshinStatsData? Data { get; set; }

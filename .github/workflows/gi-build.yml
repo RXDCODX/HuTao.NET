@@ -1,0 +1,27 @@
+name: GI Project Build
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'HuTao.NET/**' ]
+  pull_request:
+    branches: [ main ]
+    paths: [ 'HuTao.NET/**' ]
+
+jobs:
+  build-gi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore HuTao.NET/HuTao.NET.csproj
+
+      - name: Build GI project
+        run: dotnet build HuTao.NET/HuTao.NET.csproj --no-restore --configuration Release 

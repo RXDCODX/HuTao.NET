@@ -1,4 +1,4 @@
-﻿namespace HuTao.NET.GI.Util;
+﻿namespace HuTao.NET.Util;
 
 public class Errors
 {

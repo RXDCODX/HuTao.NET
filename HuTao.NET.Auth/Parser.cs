@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using HuTao.NET.GI;
 
 namespace HuTao.NET.Auth;
 

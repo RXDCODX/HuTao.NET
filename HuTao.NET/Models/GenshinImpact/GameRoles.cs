@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace HuTao.NET.GI.Models.GenshinImpact;
+namespace HuTao.NET.Models.GenshinImpact;
 
 public class GameRolesData
 {
@@ -37,8 +37,8 @@ public class GameRole
 
 public class GameRoles : IHoyoLab
 {
-    public int retcode { get; set; }
-    public string? message { get; set; }
+    public int Retcode { get; set; }
+    public string? Message { get; set; }
 
     [JsonPropertyName("data")]
     public GameRolesData? Data { get; set; }

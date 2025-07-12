@@ -1,12 +1,13 @@
-using System.Text.Json.Serialization;
-using HuTao.NET.GI.Models.GenshinImpact;
+﻿using System.Text.Json.Serialization;
+using HuTao.NET.Models.GenshinImpact;
 
-namespace HuTao.NET.GI.Models.HonkaiStarRail;
+namespace HuTao.NET.Models.HonkaiStarRail;
 
 public class StarRailRewardData : IHoyoLab
 {
-    public int retcode { get; set; }
-    public string? message { get; set; }
+    public int Retcode { get; set; }
+    public string? Message { get; set; }
+
     [JsonPropertyName("data")]
     public StarRailRewardDataInfo? Data { get; set; }
 }
@@ -60,4 +61,4 @@ public class ShortExtraAward
 
     [JsonPropertyName("end_timestamp")]
     public string EndTimestamp { get; set; } = string.Empty;
-} 
+}

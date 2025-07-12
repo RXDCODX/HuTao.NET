@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace HuTao.NET.GI.Models.HonkaiStarRail;
+﻿namespace HuTao.NET.Models.HonkaiStarRail;
 
 /// <summary>
 /// Менеджер энергии для Honkai Star Rail
@@ -196,7 +194,7 @@ public class StarRailStaminaManager
     /// </summary>
     /// <param name="data">Данные ежедневной заметки</param>
     /// <returns>Форматированная строка времени</returns>
-    public string GetStaminaRecoveryTimeString(StarRailDailyNoteData data)
+    public static string GetStaminaRecoveryTimeString(StarRailDailyNoteData data)
     {
         var timeSpan = GetStaminaRecoveryTime(data);
 
@@ -210,7 +208,7 @@ public class StarRailStaminaManager
     /// </summary>
     /// <param name="data">Данные ежедневной заметки</param>
     /// <returns>Форматированная строка времени</returns>
-    public string GetNextStaminaPointTimeString(StarRailDailyNoteData data)
+    public static string GetNextStaminaPointTimeString(StarRailDailyNoteData data)
     {
         var timeSpan = GetTimeToNextStaminaPoint(data);
         return $"{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
@@ -221,7 +219,7 @@ public class StarRailStaminaManager
     /// </summary>
     /// <param name="data">Данные ежедневной заметки</param>
     /// <returns>Строка с информацией о энергии</returns>
-    public string GetStaminaInfo(StarRailDailyNoteData data)
+    public static string GetStaminaInfo(StarRailDailyNoteData data)
     {
         var percentage = GetStaminaPercentage(data) * 100;
         var isFull = IsStaminaFull(data);
@@ -240,17 +238,12 @@ public class StarRailStaminaManager
     /// <param name="data">Данные ежедневной заметки</param>
     /// <param name="targetTime">Целевое время</param>
     /// <returns>Прогноз энергии</returns>
-    public int GetStaminaForecast(StarRailDailyNoteData data, DateTime targetTime)
+    public static int GetStaminaForecast(StarRailDailyNoteData data, DateTime targetTime)
     {
         var currentTime = DateTimeOffset.FromUnixTimeSeconds(data.CurrentTimestamp).DateTime;
         var timeSpan = targetTime - currentTime;
 
-        if (timeSpan <= TimeSpan.Zero)
-        {
-            return data.CurrentStamina;
-        }
-
-        return GetStaminaAtTime(data, timeSpan);
+        return timeSpan <= TimeSpan.Zero ? data.CurrentStamina : GetStaminaAtTime(data, timeSpan);
     }
 
     /// <summary>
@@ -277,7 +270,7 @@ public class StarRailStaminaManager
     /// <param name="data">Данные ежедневной заметки</param>
     /// <param name="threshold">Порог для использования (по умолчанию 80% от максимума)</param>
     /// <returns>True если рекомендуется использовать энергию</returns>
-    public bool ShouldUseStaminaNow(StarRailDailyNoteData data, double threshold = 0.8)
+    public static bool ShouldUseStaminaNow(StarRailDailyNoteData data, double threshold = 0.8)
     {
         var percentage = GetStaminaPercentage(data);
         return percentage >= threshold;
@@ -288,7 +281,7 @@ public class StarRailStaminaManager
     /// </summary>
     /// <param name="data">Данные ежедневной заметки</param>
     /// <returns>Список рекомендаций</returns>
-    public List<string> GetStaminaRecommendations(StarRailDailyNoteData data)
+    public static List<string> GetStaminaRecommendations(StarRailDailyNoteData data)
     {
         var recommendations = new List<string>();
 

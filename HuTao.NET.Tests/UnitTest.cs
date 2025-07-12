@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
-using HuTao.NET.GI;
 using Newtonsoft.Json;
-using static HuTao.NET.GI.Util.Errors;
+using static HuTao.NET.Util.Errors;
 
 namespace HuTao.NET.Tests;
 
@@ -66,7 +65,7 @@ public class UnitTest
     {
         var res = await _genshinClient.GetUserAccountInfoByLToken();
 
-        Assert.Equal("OK", res.message);
+        Assert.Equal("OK", res.Message);
         WriteLog(res, "GetUserAccountInfoByLToken");
     }
 
@@ -75,7 +74,7 @@ public class UnitTest
     {
         var res = await _genshinClient.FetchGenshinStats(_user);
 
-        Assert.Equal("OK", res.message);
+        Assert.Equal("OK", res.Message);
         WriteLog(res, "FetchGenshinStats");
     }
 
@@ -84,7 +83,7 @@ public class UnitTest
     {
         var res = await _genshinClient.FetchDailyNote(_user);
 
-        Assert.Equal("OK", res.message);
+        Assert.Equal("OK", res.Message);
         WriteLog(res, "FetchDailyNote");
     }
 
@@ -93,7 +92,7 @@ public class UnitTest
     {
         var res = await GenshinClient.GetAvailableLanguages();
 
-        Assert.Equal("OK", res.message);
+        Assert.Equal("OK", res.Message);
         WriteLog(res, "GetAvailableLanguages");
     }
 
@@ -102,7 +101,7 @@ public class UnitTest
     {
         try
         {
-            var res = await _genshinClient.ClaimDailyReward(_user);
+            var res = await _genshinClient.ClaimDailyReward();
             Assert.True(res.IsSuccessed);
             WriteLog(res, "ClaimDailyReward");
         }

@@ -1,12 +1,13 @@
-using System.Text.Json.Serialization;
-using HuTao.NET.GI.Models.GenshinImpact;
+﻿using System.Text.Json.Serialization;
+using HuTao.NET.Models.GenshinImpact;
 
-namespace HuTao.NET.GI.Models.HonkaiStarRail;
+namespace HuTao.NET.Models.HonkaiStarRail;
 
 public class StarRailDailyNote : IHoyoLab
 {
-    public int retcode { get; set; }
-    public string? message { get; set; }
+    public int Retcode { get; set; }
+    public string? Message { get; set; }
+
     [JsonPropertyName("data")]
     public StarRailDailyNoteData? Data { get; set; }
 }
@@ -98,5 +99,5 @@ public class StarRailExpedition
 public enum StarRailExpeditionStatus
 {
     Ongoing,
-    Finished
-} 
+    Finished,
+}

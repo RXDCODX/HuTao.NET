@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace HuTao.NET.GI.Util;
+namespace HuTao.NET.Util;
 
 internal class DynamicSecret
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace HuTao.NET.GI.Models.HoYoLab;
+namespace HuTao.NET.Models.HoYoLab;
 
 public class UserStatsData
 {

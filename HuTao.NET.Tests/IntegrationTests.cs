@@ -1,7 +1,4 @@
-using HuTao.NET.GI;
-using HuTao.NET.GI.Models.HoYoLab;
-using HuTao.NET.GI.Models.GenshinImpact;
-using HuTao.NET.GI.Models.HonkaiStarRail;
+﻿using HuTao.NET.Models.HonkaiStarRail;
 using Xunit.Abstractions;
 
 namespace HuTao.NET.Tests;
@@ -27,9 +24,11 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
             Assert.NotNull(userStats);
 
             // Если API вернул ошибку, выводим информацию и пропускаем тест
-            if (userStats.retcode != 0)
+            if (userStats.Retcode != 0)
             {
-                testOutputHelper.WriteLine($"API returned error: {userStats.retcode} - {userStats.message}");
+                testOutputHelper.WriteLine(
+                    $"API returned error: {userStats.Retcode} - {userStats.Message}"
+                );
                 testOutputHelper.WriteLine("Skipping test due to API error");
                 return;
             }
@@ -38,14 +37,18 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
             Assert.NotNull(userStats.Data?.Name);
 
             testOutputHelper.WriteLine($"User Name: {userStats.Data?.Name}");
-            testOutputHelper.WriteLine($"Game Lists Count: {userStats.Data?.GameLists?.Count ?? 0}");
+            testOutputHelper.WriteLine(
+                $"Game Lists Count: {userStats.Data?.GameLists?.Count ?? 0}"
+            );
 
             // Выводим информацию о играх пользователя
             if (userStats.Data?.GameLists != null)
             {
                 foreach (var game in userStats.Data.GameLists)
                 {
-                    testOutputHelper.WriteLine($"Game: {game.GameId} - {game.Nickname} (UID: {game.GameUid})");
+                    testOutputHelper.WriteLine(
+                        $"Game: {game.GameId} - {game.Nickname} (UID: {game.GameUid})"
+                    );
                 }
             }
         }
@@ -68,7 +71,7 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
 
         // Assert
         Assert.NotNull(accountInfo);
-        Assert.Equal(0, accountInfo.retcode);
+        Assert.Equal(0, accountInfo.Retcode);
         Assert.NotNull(accountInfo.Data);
 
         testOutputHelper.WriteLine($"Account ID: {accountInfo.Data?.AccountId}");
@@ -89,7 +92,7 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
 
         // Assert
         Assert.NotNull(gameRoles);
-        Assert.Equal(0, gameRoles.retcode);
+        Assert.Equal(0, gameRoles.Retcode);
         Assert.NotNull(gameRoles.Data);
         Assert.NotNull(gameRoles.Data?.List);
 
@@ -100,7 +103,9 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
         {
             foreach (var role in gameRoles.Data.List)
             {
-                testOutputHelper.WriteLine($"Role: {role.GameRegionName} - {role.NickName} (UID: {role.GameUid})");
+                testOutputHelper.WriteLine(
+                    $"Role: {role.GameRegionName} - {role.NickName} (UID: {role.GameUid})"
+                );
                 testOutputHelper.WriteLine($"  Level: {role.Level}, Region: {role.RegionName}");
             }
         }
@@ -116,7 +121,9 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
 
         // Получаем роли пользователя для поиска реального UID
         var gameRoles = await client.GetGameRoles();
-        var starRailRole = gameRoles.Data?.List?.FirstOrDefault(r => r.GameRegionName == "hkrpg_global");
+        var starRailRole = gameRoles.Data?.List?.FirstOrDefault(r =>
+            r.GameRegionName == "hkrpg_global"
+        );
 
         if (starRailRole == null)
         {
@@ -131,7 +138,7 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
         {
             var stats = await starRailClient.FetchStarRailStats(user);
             Assert.NotNull(stats);
-            Assert.Equal(0, stats.retcode);
+            Assert.Equal(0, stats.Retcode);
             Assert.NotNull(stats.Data);
 
             testOutputHelper.WriteLine($"Star Rail Stats - UID: {user.Uid}");
@@ -148,30 +155,54 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
         try
         {
             // Добавляем отладочную информацию
-            testOutputHelper.WriteLine($"Attempting to fetch daily note for UID: {user.Uid}, Server: {user.Server}");
+            testOutputHelper.WriteLine(
+                $"Attempting to fetch daily note for UID: {user.Uid}, Server: {user.Server}"
+            );
 
             var dailyNote = await starRailClient.FetchDailyNote(user);
             Assert.NotNull(dailyNote);
-            Assert.Equal(0, dailyNote.retcode);
+            Assert.Equal(0, dailyNote.Retcode);
             Assert.NotNull(dailyNote.Data);
 
             testOutputHelper.WriteLine($"Star Rail Daily Note - UID: {user.Uid}");
-            testOutputHelper.WriteLine($"Current Stamina: {dailyNote.Data?.CurrentStamina}/{dailyNote.Data?.MaxStamina}");
-            testOutputHelper.WriteLine($"Stamina Percentage: {StarRailClient.GetStaminaPercentage(dailyNote.Data!):F1}%");
-            testOutputHelper.WriteLine($"Is Stamina Full: {StarRailStaminaManager.IsStaminaFull(dailyNote.Data!)}");
-            testOutputHelper.WriteLine($"Stamina Recovery Time: {StarRailClient.GetStaminaRecoveryTime(dailyNote.Data!)}");
-            testOutputHelper.WriteLine($"Stamina Full Time: {StarRailClient.GetStaminaFullTime(dailyNote.Data!)}");
-            testOutputHelper.WriteLine($"Expeditions: {dailyNote.Data?.AcceptedExpeditionNum}/{dailyNote.Data?.TotalExpeditionNum}");
-            testOutputHelper.WriteLine($"Train Score: {dailyNote.Data?.CurrentTrainScore}/{dailyNote.Data?.MaxTrainScore}");
-            testOutputHelper.WriteLine($"Rogue Score: {dailyNote.Data?.CurrentRogueScore}/{dailyNote.Data?.MaxRogueScore}");
+            testOutputHelper.WriteLine(
+                $"Current Stamina: {dailyNote.Data?.CurrentStamina}/{dailyNote.Data?.MaxStamina}"
+            );
+            testOutputHelper.WriteLine(
+                $"Stamina Percentage: {StarRailClient.GetStaminaPercentage(dailyNote.Data!):F1}%"
+            );
+            testOutputHelper.WriteLine(
+                $"Is Stamina Full: {StarRailStaminaManager.IsStaminaFull(dailyNote.Data!)}"
+            );
+            testOutputHelper.WriteLine(
+                $"Stamina Recovery Time: {StarRailClient.GetStaminaRecoveryTime(dailyNote.Data!)}"
+            );
+            testOutputHelper.WriteLine(
+                $"Stamina Full Time: {StarRailClient.GetStaminaFullTime(dailyNote.Data!)}"
+            );
+            testOutputHelper.WriteLine(
+                $"Expeditions: {dailyNote.Data?.AcceptedExpeditionNum}/{dailyNote.Data?.TotalExpeditionNum}"
+            );
+            testOutputHelper.WriteLine(
+                $"Train Score: {dailyNote.Data?.CurrentTrainScore}/{dailyNote.Data?.MaxTrainScore}"
+            );
+            testOutputHelper.WriteLine(
+                $"Rogue Score: {dailyNote.Data?.CurrentRogueScore}/{dailyNote.Data?.MaxRogueScore}"
+            );
 
             if (dailyNote.Data?.Expeditions != null)
             {
                 foreach (var expedition in dailyNote.Data.Expeditions)
                 {
-                    testOutputHelper.WriteLine($"Expedition: {expedition.Name} - {expedition.Status}");
-                    testOutputHelper.WriteLine($"  Remaining Time: {StarRailClient.GetExpeditionRemainingTime(expedition)}");
-                    testOutputHelper.WriteLine($"  Completion Time: {StarRailClient.GetExpeditionCompletionTime(expedition)}");
+                    testOutputHelper.WriteLine(
+                        $"Expedition: {expedition.Name} - {expedition.Status}"
+                    );
+                    testOutputHelper.WriteLine(
+                        $"  Remaining Time: {StarRailClient.GetExpeditionRemainingTime(expedition)}"
+                    );
+                    testOutputHelper.WriteLine(
+                        $"  Completion Time: {StarRailClient.GetExpeditionCompletionTime(expedition)}"
+                    );
                 }
             }
         }
@@ -182,7 +213,9 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
             testOutputHelper.WriteLine($"Stack trace: {ex.StackTrace}");
 
             // Добавляем отладочную информацию о запросе
-            testOutputHelper.WriteLine($"Request URL would be: https://bbs-api-os.hoyolab.com/game_record/hkrpg/api/note?server={user.Server}&role_id={user.Uid}");
+            testOutputHelper.WriteLine(
+                $"Request URL would be: https://bbs-api-os.hoyolab.com/game_record/hkrpg/api/note?server={user.Server}&role_id={user.Uid}"
+            );
             testOutputHelper.WriteLine($"Cookie: {cookie.GetCookie()}");
         }
     }
@@ -197,7 +230,9 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
 
         // Получаем роли пользователя для поиска реального UID
         var gameRoles = await client.GetGameRoles();
-        var genshinRole = gameRoles.Data?.List?.FirstOrDefault(r => r.GameRegionName == "hk4e_global");
+        var genshinRole = gameRoles.Data?.List?.FirstOrDefault(r =>
+            r.GameRegionName == "hk4e_global"
+        );
 
         if (genshinRole == null)
         {
@@ -212,7 +247,7 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
         {
             var stats = await genshinClient.FetchGenshinStats(user);
             Assert.NotNull(stats);
-            Assert.Equal(0, stats.retcode);
+            Assert.Equal(0, stats.Retcode);
             Assert.NotNull(stats.Data);
 
             testOutputHelper.WriteLine($"Genshin Stats - UID: {user.Uid}");
@@ -233,22 +268,34 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
         {
             var dailyNote = await genshinClient.FetchDailyNote(user);
             Assert.NotNull(dailyNote);
-            Assert.Equal(0, dailyNote.retcode);
+            Assert.Equal(0, dailyNote.Retcode);
             Assert.NotNull(dailyNote.Data);
 
             testOutputHelper.WriteLine($"Genshin Daily Note - UID: {user.Uid}");
-            testOutputHelper.WriteLine($"Current Resin: {dailyNote.Data?.CurrentResin}/{dailyNote.Data?.MaxResin}");
+            testOutputHelper.WriteLine(
+                $"Current Resin: {dailyNote.Data?.CurrentResin}/{dailyNote.Data?.MaxResin}"
+            );
             testOutputHelper.WriteLine($"Resin Recovery Time: {dailyNote.Data?.ResinRecoveryTime}");
-            testOutputHelper.WriteLine($"Finished Tasks: {dailyNote.Data?.FinishedTaskNum}/{dailyNote.Data?.ToatalTaskNum}");
-            testOutputHelper.WriteLine($"Current Home Coin: {dailyNote.Data?.CurrentHomeCoin}/{dailyNote.Data?.MaxHomeCoin}");
-            testOutputHelper.WriteLine($"Home Coin Recovery Time: {dailyNote.Data?.HomeCoinRecoveryTime}");
-            testOutputHelper.WriteLine($"Expeditions: {dailyNote.Data?.CurrentExpeditionNum}/{dailyNote.Data?.MaxExpeditionNum}");
+            testOutputHelper.WriteLine(
+                $"Finished Tasks: {dailyNote.Data?.FinishedTaskNum}/{dailyNote.Data?.ToatalTaskNum}"
+            );
+            testOutputHelper.WriteLine(
+                $"Current Home Coin: {dailyNote.Data?.CurrentHomeCoin}/{dailyNote.Data?.MaxHomeCoin}"
+            );
+            testOutputHelper.WriteLine(
+                $"Home Coin Recovery Time: {dailyNote.Data?.HomeCoinRecoveryTime}"
+            );
+            testOutputHelper.WriteLine(
+                $"Expeditions: {dailyNote.Data?.CurrentExpeditionNum}/{dailyNote.Data?.MaxExpeditionNum}"
+            );
 
             if (dailyNote.Data?.Expeditions != null)
             {
                 foreach (var expedition in dailyNote.Data.Expeditions)
                 {
-                    testOutputHelper.WriteLine($"Expedition: {expedition.Status} - Remaining: {expedition.RemainedTime}");
+                    testOutputHelper.WriteLine(
+                        $"Expedition: {expedition.Status} - Remaining: {expedition.RemainedTime}"
+                    );
                 }
             }
         }
@@ -271,7 +318,7 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
 
         // Assert
         Assert.NotNull(rewardData);
-        Assert.Equal(0, rewardData.retcode);
+        Assert.Equal(0, rewardData.Retcode);
         Assert.NotNull(rewardData.Data);
         Assert.NotNull(rewardData.Data?.Awards);
 
@@ -283,7 +330,7 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
         // Выводим информацию о наградах
         if (rewardData.Data?.Awards != null)
         {
-            for (int i = 0; i < Math.Min(5, rewardData.Data.Awards.Length); i++)
+            for (var i = 0; i < Math.Min(5, rewardData.Data.Awards.Length); i++)
             {
                 var award = rewardData.Data.Awards[i];
                 testOutputHelper.WriteLine($"Award {i + 1}: {award.Name} x{award.Count}");
@@ -299,7 +346,7 @@ public class IntegrationTests(ITestOutputHelper testOutputHelper)
 
         // Assert
         Assert.NotNull(languages);
-        Assert.Equal(0, languages.retcode);
+        Assert.Equal(0, languages.Retcode);
         Assert.NotNull(languages.Data);
         Assert.NotNull(languages.Data?.Langs);
 

@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace HuTao.NET.GI.Models.HonkaiStarRail;
+﻿namespace HuTao.NET.Models.HonkaiStarRail;
 
 /// <summary>
 /// Аргументы события достижения максимальной энергии

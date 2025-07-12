@@ -1,6 +1,6 @@
-﻿using static HuTao.NET.GI.Util.Errors;
+﻿using static HuTao.NET.Util.Errors;
 
-namespace HuTao.NET.GI.Util;
+namespace HuTao.NET.Util;
 
 public class Server
 {
